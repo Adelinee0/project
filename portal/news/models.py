@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.db.models import Sum
 from django.core.cache import cache
+from django.utils.translation import gettext as _
+from django.utils.translation import pgettext_lazy
 
 class Author(models.Model):
     authorUser = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -21,7 +23,7 @@ class Author(models.Model):
         self.save()
 
 class Category(models.Model):
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100, unique=True, help_text=_('category name'))
     subscribers = models.ManyToManyField(User, related_name='categories')
 
     def __str__(self):
@@ -70,6 +72,8 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return reverse('post_detail', args=[str(self.id)])
+
+    verbose_name = pgettext_lazy('help text for MyModel model', 'This is the help text'),
 
 
 
